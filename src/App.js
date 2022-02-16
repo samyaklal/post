@@ -1,24 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import AddPost from "./components/AddPost";
+import PostList from "./components/PostList";
+import { useState } from "react";
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  const addPost = (title, body) => setPosts([...posts, { title, body }]);
+  const movePost = (index, moveBy) => {
+    const postCopy = [...posts];
+    let temp;
+
+    temp = postCopy[index];
+    postCopy[index] = postCopy[index + moveBy];
+    postCopy[index + moveBy] = temp;
+
+    setPosts(postCopy);
+  };
+  const deletePost = (index) =>
+    setPosts(posts.filter((post, i) => i !== index));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <>
+      <header>
+        <h1>Post</h1>
       </header>
-    </div>
+      <main>
+        <AddPost addPost={addPost} />
+        <PostList posts={posts} movePost={movePost} deletePost={deletePost} />
+      </main>
+    </>
   );
 }
 
